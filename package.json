@@ -1,0 +1,33 @@
+{
+  "name": "monitoring-server",
+  "version": "0.0.1",
+  "description": "Monitoring server prototipe.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel/register",
+    "start": "supervisor -n exit -w dist/ dist/index.js"
+  },
+  "author": "Martin Morávek",
+  "license": "MIT",
+  "dependencies": {
+    "babel": "^5.8.23",
+    "chai": "^3.2.0",
+    "hapi": "^9.1.0",
+    "mysql": "^2.9.0",
+    "rsvp": "^3.1.0",
+    "socket.io": "^1.3.6",
+    "socket.io-client": "^1.3.6",
+    "source-map-support": "^0.3.2",
+    "winston": "^2.1.1"
+  },
+  "devDependencies": {
+    "lorem-ipsum": "^1.0.3",
+    "broccoli": "^0.16.8",
+    "broccoli-babel-transpiler": "^5.4.5",
+    "broccoli-eslint": "https://github.com/jonathanKingston/broccoli-eslint#1d38b099a0eb09e3f61a77c780ce90c341b8edd6",
+    "broccoli-funnel": "^0.2.8",
+    "broccoli-jshint": "^1.1.0",
+    "broccoli-merge-trees": "^0.2.3",
+    "mocha": "^2.3.0"
+  }
+}

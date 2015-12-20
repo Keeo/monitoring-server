@@ -1,24 +1,14 @@
 import chai from 'chai';
 import server from '../app/server';
+import winston from 'winston';
 const { expect, assert } = chai;
 
-describe('Group messages', () => {
+describe('Index test', () => {
+  before(() => winston.remove(winston.transports.Console));
 
-  beforeEach(done => {
-    //server.start(() => done());
-    done();
-  });
-
-  afterEach(done => {
-    //server.stop(() => done());
-    done();
-  });
-
-  describe('Message Events', () => {
-    it('Users should receive \'created group\' packet on group creation.', done => {
-      assert.equal('bar', 'bar');
-
-      done();
+  describe('Boot up', () => {
+    it('It should start without exception.', done => {
+      server().start(() => done());
     });
   });
 });

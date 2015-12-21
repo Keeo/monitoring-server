@@ -1,0 +1,11 @@
+machine:
+  node:
+    version: v0.12.9
+dependencies:
+  pre:
+    - npm install -g jscs mocha broccoli-cli
+test:
+  override:
+    - jscs ./app/
+    - broccoli build ./dist
+    - npm test

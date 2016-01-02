@@ -9,6 +9,7 @@
   },
   "author": "Martin Morávek",
   "license": "MIT",
+  "repository": "https://github.com/Keeo/monitoring-server",
   "dependencies": {
     "hapi": "^9.1.0",
     "mysql": "^2.9.0",

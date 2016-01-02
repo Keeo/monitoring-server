@@ -1,6 +1,5 @@
 import 'source-map-support/register';
-import { info } from 'winston';
-import server from './server.js';
+import starter from './starter.js';
 
-server({port: 4000}).start(() => info('Server started'));
+starter({hapi: {port: 4000}, mysql: {port: 3306}});
 

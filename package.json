@@ -12,6 +12,7 @@
   "repository": "https://github.com/Keeo/monitoring-server",
   "dependencies": {
     "hapi": "^9.1.0",
+    "joi": "^6.10.0",
     "mysql": "^2.9.0",
     "rsvp": "^3.1.0",
     "source-map-support": "^0.3.2",

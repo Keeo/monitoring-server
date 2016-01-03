@@ -1,5 +1,5 @@
 import RSVP from 'rsvp';
-import { info } from 'winston';
+import { info, warn } from 'winston';
 const { isInteger } = Number;
 
 export default function(connection, generators) {
@@ -24,19 +24,38 @@ export default function(connection, generators) {
 
     getNodeFromHash(hash) {
       info(`Retrieving node based on hash: ${hash.substring(0, 16)}.`);
-      return this.query('SELECT * FROM `node` WHERE hash = ?', [hash]).then(result => {
-        if (result.length !== 1) {
-          return RSVP.reject('Server with this hash was not found.');
-        } else {
-          return result[0];
-        }
-      });
+      return this._getOne('SELECT * FROM `node` WHERE hash = ?', hash);
+    },
+
+    getNodeFromId(id) {
+      info(`Retrieving node based on id: ${id}.`);
+      return this._getOne('SELECT * FROM `node` WHERE id = ?', id);
+    },
+
+    getNodes() {
+      info(`Retrieving nodes`);
+      return this._getAll('node');
     },
 
     saveLog(node, log) {
       let nodeId = isInteger(node) ? node : node.id;
       info(`Saving log for node ${nodeId} with ${log.substring(0, 32)}.`);
       return this.query('INSERT INTO log SET node_id = ?, log = ?', [nodeId, log]);
+    },
+
+    _getAll(table) {
+      return this.query('SELECT * FROM ??', [table]);
+    },
+
+    _getOne(query, key) {
+      return this.query(query, [key]).then(result => {
+        if (result.length !== 1) {
+          warn(`Something with key: '${key}' was not found.`, {query: query, key: key});
+          return RSVP.reject('Server with this hash was not found.');
+        } else {
+          return result[0];
+        }
+      });
     }
   };
 }

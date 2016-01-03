@@ -1,10 +1,15 @@
 export default function(persistence) {
-  let route = {
+  return {
     method: 'GET',
     path: '/api',
     handler(request, reply) {
-      reply({api: 'hello!'});
+      persistence.createNode().then(createdNode => {
+        persistence.getNodeFromHash(createdNode.hash).then(node => {
+          reply({api: 'hello!', id: node.id});
+        }, err => {
+          reply({api: 'hello!', err: err});
+        });
+      });
     }
   };
-  return route;
 }

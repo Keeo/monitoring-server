@@ -19,7 +19,7 @@ describe('Index test', () => {
       serverInstance.start(() => done());
     });
 
-    it('it should fetch index route.', done => {
+    xit('it should fetch index route.', done => {
       serverInstance.inject({
         method: 'GET',
         url: '/api'

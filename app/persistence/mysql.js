@@ -6,7 +6,7 @@ export default function(options) {
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'treewer'
+    database: 'monitoring'
   }, options);
   return mysql.createConnection(options);
 }

@@ -1,4 +1,6 @@
 import server from './mysql';
+import persistence from './persistence';
+import generators from '../generator/generators';
 import RSVP from 'rsvp';
 import { error, info } from 'winston';
 
@@ -18,7 +20,7 @@ export default function(options) {
           return reject(err);
         } else {
           info('Mysql connection tested successfully.');
-          return resolve(instance);
+          return resolve(persistence(instance, generators));
         }
       });
     });

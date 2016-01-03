@@ -14,12 +14,18 @@ export default function(connection, generators) {
       });
     },
 
-    createNode(name = this.generators.name.getName()) {
+    createNode(owner, name = this.generators.name.getName()) {
       info(`Creating new node with name: ${name}.`);
       let hash = this.generators.crypto.getNodeHash();
-      return this.query('INSERT INTO `node` SET hash = ?, name = ?', [hash, name]).then(result => {
-        return {id: result.insertId, hash: hash, name: name};
+      let user = isInteger(owner) ? owner : owner.id;
+      return this.query('INSERT INTO `node` SET hash = ?, user = ?, name = ?', [hash, user, name]).then(result => {
+        return {id: result.insertId, hash: hash, name: name, user: user};
       });
+    },
+
+    getUserFromHash(hash) {
+      info(`Retrieving user based on hash: ${hash.substring(0, 16)}.`);
+      return this._getOne('SELECT * FROM `user` WHERE hash = ?', hash);
     },
 
     getNodeFromHash(hash) {
@@ -39,7 +45,7 @@ export default function(connection, generators) {
 
     saveLog(node, log) {
       let nodeId = isInteger(node) ? node : node.id;
-      info(`Saving log for node ${nodeId} with ${log.substring(0, 32)}.`);
+      info(`Saving log for node ${nodeId} with ${log.substring(0, 16)}.`);
       return this.query('INSERT INTO log SET node_id = ?, log = ?', [nodeId, log]);
     },
 
@@ -51,7 +57,7 @@ export default function(connection, generators) {
       return this.query(query, [key]).then(result => {
         if (result.length !== 1) {
           warn(`Something with key: '${key}' was not found.`, {query: query, key: key});
-          return RSVP.reject('Server with this hash was not found.');
+          return RSVP.reject('Something with this hash was not found.');
         } else {
           return result[0];
         }

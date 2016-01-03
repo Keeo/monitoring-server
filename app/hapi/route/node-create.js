@@ -1,11 +1,14 @@
-import { error, info } from 'winston';
+import { error } from 'winston';
 
 export default function(persistence) {
   return {
     method: 'POST',
     path: '/api/node/',
+    config: {
+      auth: 'admin'
+    },
     handler(request, reply) {
-      persistence.createNode().then(createdNode => {
+      persistence.createNode(request.auth.credentials).then(createdNode => {
         reply(createdNode);
       }, err => {
         error(err);

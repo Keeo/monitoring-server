@@ -18,7 +18,7 @@ export default function(persistence, options) {
           info(`User ${user.email} authorized successfully.`);
           return callback(null, true, user);
         }, err => {
-          info(`Token authorization failed with token: ${token.substring(0, 16)}.`);
+          info(`Token authorization failed with token: ${token.substring(0, 16)}.`, err);
           return callback(null, false);
         });
       }

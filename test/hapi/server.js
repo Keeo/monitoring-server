@@ -19,10 +19,10 @@ describe('Index test', () => {
       serverInstance.start(() => done());
     });
 
-    xit('it should fetch index route.', done => {
+    it('it should fetch index route.', done => {
       serverInstance.inject({
         method: 'GET',
-        url: '/api'
+        url: '/api/'
       }, response => {
         assert.equal(response.statusCode, 200);
         assert.deepEqual(response.result, {api: 'hello!'});

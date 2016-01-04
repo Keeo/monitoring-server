@@ -6,6 +6,7 @@ export default function(connection, generators) {
   return {
     generators: generators,
     connection: connection,
+
     query(query, values) {
       return new Promise((resolve, reject) => {
         this.connection.query(query, values, (error, result) => {

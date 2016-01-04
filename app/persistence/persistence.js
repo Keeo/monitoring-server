@@ -44,10 +44,14 @@ export default function(connection, generators) {
       return this._getAll('node');
     },
 
-    saveLog(node, log) {
-      let nodeId = isInteger(node) ? node : node.id;
-      info(`Saving log for node ${nodeId} with ${log.substring(0, 16)}.`);
-      return this.query('INSERT INTO log SET node_id = ?, log = ?', [nodeId, log]);
+    saveLog(node, severity, message, context, created) {
+      return this.query('INSERT INTO log SET node = ?, severity = ?, message = ?, context = ?, created = ?', [
+        node, severity, message, context, created
+      ]).then(null, err => console.log(err));
+    },
+
+    getLogs(node, limit) {
+      return this.query('SELECT * FROM log WHERE node = ? ORDER BY created DESC LIMIT ?', [node, limit]);
     },
 
     _getAll(table) {

@@ -19,3 +19,14 @@ CREATE TABLE `node` (
   FOREIGN KEY (user) REFERENCES user(id),
   UNIQUE (`hash`)
 ) ENGINE = InnoDB;
+
+CREATE TABLE `log` (
+  `id` INT NOT NULL AUTO_INCREMENT ,
+  `severity` CHAR(6) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'info' ,
+  `message` VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+  `context` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL ,
+  `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  `node` INT NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (node) REFERENCES node(id)
+) ENGINE = InnoDB;

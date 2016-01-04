@@ -6,3 +6,7 @@ INSERT INTO `user` (`id`, `email`, `password`, `hash`) VALUES
 INSERT INTO `node` (`id`, `hash`, `name`, `user`) VALUES
 ('1', 'node-secret-hash-1', 'karel', '1'),
 ('2', 'node-secret-hash-2', 'lukas', '1');
+
+INSERT INTO `log` (`id`, `severity`, `message`, `context`, `created`, `node`) VALUES
+('1', 'info', 'test log message', NULL, CURRENT_TIMESTAMP, '1'),
+('2', 'debug', 'debug log message', NULL, '2016-01-12 00:00:00', '1');

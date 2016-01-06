@@ -1,13 +1,13 @@
 import server from './server';
-import RSVP from 'rsvp';
 import { info } from 'winston';
 
 export default function(persistence, options) {
-  return new RSVP.Promise(resolve => {
-    let serverInstance = server(persistence, options);
+  return server(persistence, options).then(serverInstance => {
     serverInstance.start(() => {
       info('Hapi server started.');
-      return resolve(serverInstance);
+      return serverInstance;
     });
+  }).catch(err => {
+    console.log(err);
   });
 }

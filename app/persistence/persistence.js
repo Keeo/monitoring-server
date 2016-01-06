@@ -1,4 +1,3 @@
-import RSVP from 'rsvp';
 import { info, warn } from 'winston';
 const { isInteger } = Number;
 
@@ -62,7 +61,7 @@ export default function(connection, generators) {
       return this.query(query, [key]).then(result => {
         if (result.length !== 1) {
           warn(`Something with key: '${key}' was not found.`, {query: query, key: key});
-          return RSVP.reject('Something with this hash was not found.');
+          return Promise.reject('Something with this hash was not found.');
         } else {
           return result[0];
         }

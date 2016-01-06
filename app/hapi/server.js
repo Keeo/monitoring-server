@@ -3,6 +3,7 @@ import AuthBearer from 'hapi-auth-bearer-token';
 import fs from 'fs';
 import { info, error } from 'winston';
 import merge from '../utils/merge';
+import routeLoader from './route-loader';
 
 export default function(persistence, options) {
   options = merge({port: 3000}, options);
@@ -10,8 +11,11 @@ export default function(persistence, options) {
 
   let server = new Hapi.Server();
   server.connection(options);
-
   server.register(AuthBearer, err => {
+    if (err) {
+      throw err;
+    }
+
     server.auth.strategy('admin', 'bearer-access-token', {
       validateFunc(token, callback) {
         persistence.getUserFromHash(token).then(user => {
@@ -25,12 +29,9 @@ export default function(persistence, options) {
     });
   });
 
-  info('Routes: ');
-  fs.readdirSync('./dist/hapi/route').forEach(route => {
-    server.route(require(`../../dist/hapi/route/${route}`)(persistence));
-    info(`  ${route}`);
+  return new Promise(resolve => {
+    routeLoader(server, persistence);
+    info('Routes loaded.');
+    return resolve(server);
   });
-  info('Routes loaded');
-
-  return server;
 }

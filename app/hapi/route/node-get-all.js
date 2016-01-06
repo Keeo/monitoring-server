@@ -1,5 +1,4 @@
-import { error, info } from 'winston';
-import Joi from 'joi';
+import { error } from 'winston';
 
 export default function(persistence) {
   return {

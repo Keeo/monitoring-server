@@ -8,15 +8,19 @@ describe('Index test', () => {
 
   describe('Boot up', () => {
     it('It should start without exception.', done => {
-      server().start(() => done());
+      server().then(server => {
+        server.start(() => done());
+      });
     });
   });
 
   describe('Route testing.', () => {
     let serverInstance;
     beforeEach(done => {
-      serverInstance = server();
-      serverInstance.start(() => done());
+      server().then(server => {
+        serverInstance = server;
+        serverInstance.start(() => done());
+      });
     });
 
     it('it should fetch index route.', done => {

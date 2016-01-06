@@ -1,4 +1,4 @@
-export default function(persistence) {
+export default function() {
   return {
     method: 'GET',
     path: '/api/',

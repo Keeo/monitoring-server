@@ -1,11 +1,10 @@
 import mysql from './mysql';
 import persistence from './persistence';
 import generators from '../generator/generators';
-import RSVP from 'rsvp';
 import { error, info } from 'winston';
 
 export default function(options) {
-  return new RSVP.Promise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     let connection = mysql(options);
     connection.connect(err => {
       if (err) {

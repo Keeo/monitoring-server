@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel app/ --out-dir dist --source-maps",
-    "test": "jscs ./app && mocha --compilers js:babel-core/register --recursive",
+    "test": "jshint ./app && jscs ./app && mocha --compilers js:babel-core/register --recursive",
     "start": "supervisor -n exit -w app/ -x babel-node app/app.js"
   },
   "engines" : {

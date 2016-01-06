@@ -1,7 +1,6 @@
 import Hapi from 'hapi';
 import AuthBearer from 'hapi-auth-bearer-token';
-import fs from 'fs';
-import { info, error } from 'winston';
+import { info } from 'winston';
 import merge from '../utils/merge';
 import routeLoader from './route-loader';
 

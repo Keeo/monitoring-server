@@ -3,7 +3,9 @@ machine:
     version: v4.2.2
 dependencies:
   pre:
-    - npm install -g jscs mocha babel-cli
+    - npm install -g jscs mocha babel-cli jshint
 test:
   override:
-    - npm test
+    - jshint ./app
+    - jscs ./app
+    - mocha --compilers js:babel-core/register --recursive

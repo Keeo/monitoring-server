@@ -3,7 +3,7 @@ import { error, info } from 'winston';
 
 /**
  * @param {*} options
- * @returns {Promise}
+ * @returns {Promise.<Persistence>}
  */
 export default function(options) {
   return new Promise((resolve, reject) => {

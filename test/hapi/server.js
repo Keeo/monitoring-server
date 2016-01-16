@@ -1,9 +1,8 @@
-import chai from 'chai';
+import { expect, assert } from 'chai';
 import { getServerInstance } from './helper';
 import winston from 'winston';
-const { expect, assert } = chai;
 
-describe('Index test', () => {
+describe('Basic rest api server test', () => {
   before(() => winston.remove(winston.transports.Console));
 
   describe('Boot up', () => {
@@ -23,7 +22,7 @@ describe('Index test', () => {
       });
     });
 
-    it('it should fetch index route.', done => {
+    it('It should fetch index route.', done => {
       hapi.inject({
         method: 'GET',
         url: '/api/'

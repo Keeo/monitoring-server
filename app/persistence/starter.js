@@ -1,10 +1,9 @@
-import generators from '../generator/generators';
 import { Persistence } from './persistence';
 import { error, info } from 'winston';
 
 export default function(options) {
   return new Promise((resolve, reject) => {
-    let persistence = new Persistence(generators, options);
+    let persistence = new Persistence(options);
     persistence.connect();
     persistence.loadModels();
     persistence.testConnection().then(() => {

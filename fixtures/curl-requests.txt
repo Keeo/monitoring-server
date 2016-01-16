@@ -1,1 +1,2 @@
-curl -X POST http://localhost:4000/api/log/ -H "Content-Type: application/json" -d '{"log":{"severity":"info", "message":"it should work"}}'
+curl -X POST http://localhost:4000/api/log/ -H "Content-Type: application/json" -H "Authorization: Bearer node-secret-hash-1" -d '{"log":{"severity":"info", "message":"it should work"}}'
+curl -X POST http://localhost:4000/api/node/ -H "Content-Type: application/json" -H "Authorization: Bearer user-secret-hash-1"

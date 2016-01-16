@@ -2,7 +2,6 @@ import Sequelize from 'sequelize';
 import S from 'string';
 import SequelizeFixtures from 'sequelize-fixtures';
 import merge from '../utils/merge';
-import { info } from 'winston';
 
 import user from './model/user';
 import node from './model/node';
@@ -11,11 +10,9 @@ import log from './model/log';
 export class Persistence {
 
   /**
-   * @param generators
    * @param options
    */
-  constructor(generators, options = {}) {
-    this.generators = generators;
+  constructor(options = {}) {
     this.options = merge({
       host: 'localhost',
       username: 'root',
@@ -37,23 +34,6 @@ export class Persistence {
       define: {
         freezeTableName: true
       }
-    });
-
-    process.stdin.resume();
-    process.on('exit', () => {
-      info("...EXIT...");
-      this.close();
-      process.exit(0);
-    });
-    process.on('SIGINT', () => {
-      info("...SIGINT...");
-      this.close();
-      process.exit(0);
-    });
-    process.on('SIGTERM', () => {
-      info("...SIGTERM...");
-      this.close();
-      process.exit(0);
     });
   }
 
@@ -103,7 +83,6 @@ export class Persistence {
    * @returns {Promise}
    */
   loadFixtures() {
-    console.log(__dirname + "/../../fixtures/test-data.json");
     return SequelizeFixtures.loadFile(__dirname + '/../../fixtures/test-data.json', this.models);
   }
 

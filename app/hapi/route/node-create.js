@@ -5,11 +5,13 @@ export default function(persistence) {
     method: 'POST',
     path: '/api/node/',
     config: {
-      auth: 'admin'
+      auth: 'user'
     },
     handler(request, reply) {
-      persistence.createNode(request.auth.credentials).then(createdNode => {
-        reply(createdNode);
+      persistence.getModel('node').create({
+        user: request.auth.credentials.id
+      }).then(node => {
+        reply(node.get({plain: true}));
       }, err => {
         error(err);
         reply(err);

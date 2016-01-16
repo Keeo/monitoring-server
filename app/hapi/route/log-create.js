@@ -8,13 +8,11 @@ export default function(persistence) {
   return {
     method: 'POST',
     path: '/api/log/',
-    /*config: {
+    config: {
       auth: 'node'
-    },*/
+    },
     handler(request, reply) {
-      // faked node
       let node = request.auth.credentials;
-      node = {name: 'karel', id: 1};
       let log = request.payload.log;
       info(`Saving log from node ${node.name} with message '${log.message.substring(0, 16)}'.`, log);
       persistence.getModel('log').create({
@@ -23,8 +21,8 @@ export default function(persistence) {
         message: log.message,
         context: log.context,
         clientCreatedAt: log.created
-      }).then(({dataValues}) => {
-        reply(dataValues);
+      }).then(log => {
+        reply(log.get({plain: true}));
       }, err => {
         error(err);
         reply(err);

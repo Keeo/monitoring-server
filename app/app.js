@@ -1,3 +1,3 @@
-import starter from './starter.js';
+import builder from './builder.js';
 
-starter({hapi: {port: 4000}, persistence: {port: 3306}});
+builder({hapi: {port: 4000}, persistence: {port: 3306}});

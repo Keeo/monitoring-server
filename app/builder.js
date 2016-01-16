@@ -1,8 +1,12 @@
-import persistenceStarter from './persistence/starter';
-import hapiStarter from './hapi/starter';
+import persistenceBuilder from './persistence/builder';
+import hapiBuilder from './hapi/builder';
 import { info, error } from 'winston';
 
-export default function starter(options) {
+/**
+ * @param {*} options
+ * @returns {Promise.<Server>}
+ */
+export default function builder(options) {
   process.on('unhandledRejection', reason => {
     error('Possibly unhandled rejection reason:\n', reason);
     error(reason.stack);
@@ -11,9 +15,10 @@ export default function starter(options) {
 
   info('==========================================================================');
   info(`Server starting at ${new Date()}`);
-  return persistenceStarter(options.persistence).then(persistence => {
-    return hapiStarter(persistence, options.hapi).then(() => {
+  return persistenceBuilder(options.persistence).then(persistence => {
+    return hapiBuilder(persistence, options.hapi).then(server => {
       info(`Server started at ${new Date()}`);
+      return server;
     });
   });
 }

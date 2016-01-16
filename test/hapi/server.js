@@ -1,5 +1,5 @@
 import chai from 'chai';
-import server from '../../app/hapi/server';
+import { getServerInstance } from './helper';
 import winston from 'winston';
 const { expect, assert } = chai;
 
@@ -8,23 +8,23 @@ describe('Index test', () => {
 
   describe('Boot up', () => {
     it('It should start without exception.', done => {
-      server().then(server => {
-        server.start(() => done());
-      });
+      getServerInstance().then(() => done());
     });
   });
 
   describe('Route testing.', () => {
-    let serverInstance;
+    let hapi;
+    let server;
     beforeEach(done => {
-      server().then(server => {
-        serverInstance = server;
-        serverInstance.start(() => done());
+      getServerInstance().then(ser => {
+        server = ser;
+        hapi = ser.server;
+        done();
       });
     });
 
     it('it should fetch index route.', done => {
-      serverInstance.inject({
+      hapi.inject({
         method: 'GET',
         url: '/api/'
       }, response => {

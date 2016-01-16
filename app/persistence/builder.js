@@ -1,6 +1,10 @@
 import { Persistence } from './persistence';
 import { error, info } from 'winston';
 
+/**
+ * @param {*} options
+ * @returns {Promise}
+ */
 export default function(options) {
   return new Promise((resolve, reject) => {
     let persistence = new Persistence(options);

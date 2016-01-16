@@ -1,5 +1,4 @@
 import { error } from 'winston';
-import Joi from 'joi';
 
 /**
  * @param {Persistence} persistence

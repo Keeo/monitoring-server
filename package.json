@@ -8,8 +8,8 @@
     "test": "jshint ./app && jscs ./app && mocha --compilers js:babel-core/register --recursive",
     "start": "supervisor -n exit -w app/ -x babel-node app/app.js"
   },
-  "engines" : {
-    "node" : ">=4.0.0"
+  "engines": {
+    "node": ">=4.0.0"
   },
   "author": "Martin Morávek",
   "license": "MIT",
@@ -19,6 +19,7 @@
     "hapi-auth-bearer-token": "^4.0.0",
     "joi": "^7.1.0",
     "mysql": "^2.10.0",
+    "sequelize": "^3.17.3",
     "winston": "^2.1.1"
   },
   "devDependencies": {
@@ -27,6 +28,7 @@
     "babel-register": "^6.3.13",
     "chai": "^3.4.1",
     "lorem-ipsum": "^1.0.3",
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "sequelize-fixtures": "^0.4.8"
   }
 }

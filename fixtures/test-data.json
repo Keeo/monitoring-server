@@ -1,0 +1,60 @@
+[
+  {
+    "model": "User",
+    "keys": [
+      "email"
+    ],
+    "data": {
+      "id": 1,
+      "email": "test@email.com",
+      "password": "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff",
+      "hash": "user-secret-hash-1"
+    }
+  },
+  {
+    "model": "Node",
+    "keys": [
+      "hash"
+    ],
+    "data": {
+      "id": 1,
+      "hash": "node-secret-hash-1",
+      "name": "karel",
+      "user": 1
+    }
+  },
+  {
+    "model": "Node",
+    "keys": [
+      "hash"
+    ],
+    "data": {
+      "id": 2,
+      "hash": "node-secret-hash-2",
+      "name": "lukas",
+      "user": 1
+    }
+  },
+  {
+    "model": "Log",
+    "data": {
+      "id": 1,
+      "severity": "info",
+      "message": "test log message",
+      "context": null,
+      "clientCreatedAt": null,
+      "node": 1
+    }
+  },
+  {
+    "model": "Log",
+    "data": {
+      "id": 2,
+      "severity": "debug",
+      "message": "debug log message",
+      "context": null,
+      "clientCreatedAt": "2016-01-12 00:00:00",
+      "node": 1
+    }
+  }
+]

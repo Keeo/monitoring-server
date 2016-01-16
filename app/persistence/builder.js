@@ -1,4 +1,4 @@
-import { Persistence } from './persistence';
+import Persistence from './persistence';
 import { error, info } from 'winston';
 
 /**

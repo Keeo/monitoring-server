@@ -6,6 +6,10 @@ import nodeGetAll from './route/node-get-all';
 import nodeGetOne from './route/node-get-one';
 import userLogin from './route/user-login';
 
+/**
+ * @param {internals.Server} server
+ * @param {Persistence} persistence
+ */
 export default function(server, persistence) {
   server.route(index(persistence));
   server.route(logCreate(persistence));

@@ -22,6 +22,7 @@ export default class Server {
   }
 
   registerAuthorization() {
+    let persistence = this.persistence;
     this.server.register(AuthBearer, err => {
       if (err) {
         error(err);
@@ -30,12 +31,12 @@ export default class Server {
 
       this.server.auth.strategy('user', 'bearer-access-token', {
         validateFunc(token, callback) {
-          this.persistence.getModel('user').findOne({where: {hash: token}}).then(user => {
+          persistence.getModel('user').findOne({where: {hash: token}}).then(user => {
             if (user) {
               info(`User ${user.email} authorized successfully.`);
               return callback(null, true, user);
             } else {
-              info(`User authorization failed with token: ${token.substring(0, 16)}.`, err);
+              info(`User with token: ${token.substring(0, 16)} not found.`, err);
               return callback(null, false);
             }
           }, err => {
@@ -47,7 +48,7 @@ export default class Server {
 
       this.server.auth.strategy('node', 'bearer-access-token', {
         validateFunc(token, callback) {
-          this.persistence.getModel('node').findOne({where: {hash: token}}).then(node => {
+          persistence.getModel('node').findOne({where: {hash: token}}).then(node => {
             if (node) {
               info(`Node ${node.name} with id ${node.id} authorized successfully.`);
               return callback(null, true, node);

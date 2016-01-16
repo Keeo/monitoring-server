@@ -12,12 +12,12 @@ export default function(persistence) {
       auth: false
     },
     handler(request, reply) {
-      let user =  request.payload.user;
-      persistence.getModel('user').findOne({where: {password: user.password, email: user.email}, raw: true}).then(user => {
+      let {email, password} =  request.payload;
+      persistence.getModel('user').findOne({where: {password: password, email: email}, raw: true}).then(user => {
         if (user) {
           reply(user);
         } else {
-          reply({errors: [{status: '401', title: 'Authorization failed.'}]}, 401);
+          reply({errors: [{status: '401', title: 'Authorization failed.'}]}).code(401);
         }
       }, err => {
         error(err);

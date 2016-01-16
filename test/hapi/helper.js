@@ -2,6 +2,22 @@ import Server from '../../app/hapi/server';
 import Persistence from '../../app/persistence/persistence';
 
 /**
+ * @param {Server} server
+ * @returns {Promise.<{}>}
+ */
+export function getNode(server) {
+  return server.persistence.getModel('node').find({raw: true});
+}
+
+/**
+ * @param {Server} server
+ * @returns {Promise.<{}>}
+ */
+export function getUser(server) {
+  return server.persistence.getModel('user').find({raw: true});
+}
+
+/**
  * @returns {Promise.<Persistence>}
  */
 export function getPersistenceInstance() {

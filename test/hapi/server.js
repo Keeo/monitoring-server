@@ -1,5 +1,5 @@
 import { expect, assert } from 'chai';
-import { getServerInstance } from './helper';
+import { getServerInstance, getPersistenceInstance } from './helper';
 import winston from 'winston';
 
 describe('Basic rest api server test', () => {
@@ -30,6 +30,26 @@ describe('Basic rest api server test', () => {
         assert.equal(response.statusCode, 200);
         assert.deepEqual(response.result, {api: 'hello!'});
         done();
+      });
+    });
+
+    it('Log creation route.', done => {
+      server.persistence.getModel('node').find({raw: true}).then(node => {
+        let log = {severity: 'info', message: 'it should work'};
+        hapi.inject({
+          method: 'POST',
+          url: '/api/log/',
+          credentials: node,
+          payload: {log: log}
+        }, response => {
+          assert.equal(response.statusCode, 200);
+          let returnedLog = response.result;
+          assert.equal(returnedLog.node, node.id);
+          assert.equal(returnedLog.severity, log.severity);
+          assert.equal(returnedLog.message, log.message);
+          assert.equal(returnedLog.context, undefined);
+          done();
+        });
       });
     });
   });

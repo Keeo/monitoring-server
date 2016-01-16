@@ -21,6 +21,7 @@ export default function(sequelize, user) {
     },
     user: {
       type: Sequelize.INTEGER,
+      allowNull: false,
       references: {
         model: user,
         key: 'id'

@@ -6,6 +6,10 @@ import routeLoader from './route-loader';
 
 export default class Server {
 
+  /**
+   * @param {Persistence} persistence
+   * @param {*} options
+   */
   constructor(persistence, options) {
     options = merge({port: 3000}, options);
     this.persistence = persistence;

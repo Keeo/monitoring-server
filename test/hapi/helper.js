@@ -1,15 +1,45 @@
 import Server from '../../app/hapi/server';
+import Persistence from '../../app/persistence/persistence';
+
+/**
+ * @returns {Promise.<Persistence>}
+ */
+export function getPersistenceInstance() {
+  return new Promise(resolve => {
+    let persistence = new Persistence({
+      host: 'localhost',
+      username: 'root',
+      password: '',
+      database: 'monitoring',
+      port: '3306',
+      dialect: 'sqlite',
+      storage: __dirname + '/../../tmp/test-database.sqlite',
+      logging: false
+    });
+    persistence.connect();
+    persistence.loadModels();
+    persistence.sync(true).then(() => {
+      persistence.testConnection().then(() => {
+        persistence.loadFixtures().then(() => {
+          resolve(persistence);
+        });
+      });
+    });
+  })
+}
 
 /**
  * @returns {Promise.<Server>}
  */
 export function getServerInstance() {
   return new Promise(resolve => {
-    let server = new Server();
-    server.registerAuthorization();
-    server.registerRoutes();
-    server.server.start(() => {
-      return resolve(server);
-    })
+    getPersistenceInstance().then(persistence => {
+      let server = new Server(persistence);
+      server.registerAuthorization();
+      server.registerRoutes();
+      server.server.start(() => {
+        return resolve(server);
+      })
+    });
   });
 }

@@ -7,7 +7,7 @@ import user from './model/user';
 import node from './model/node';
 import log from './model/log';
 
-export class Persistence {
+export default class Persistence {
 
   /**
    * @param options
@@ -19,7 +19,9 @@ export class Persistence {
       password: '',
       database: 'monitoring',
       port: '3306',
-      dialect: 'mysql'
+      dialect: 'mysql',
+      storage: undefined,
+      logging: true
     }, options);
   }
 
@@ -31,6 +33,8 @@ export class Persistence {
       host: this.options.host,
       port: this.options.port,
       dialect: this.options.dialect,
+      storage: this.options.storage,
+      logging: this.options.logging,
       define: {
         freezeTableName: true
       }
@@ -83,7 +87,11 @@ export class Persistence {
    * @returns {Promise}
    */
   loadFixtures() {
-    return SequelizeFixtures.loadFile(__dirname + '/../../fixtures/test-data.json', this.models);
+    let options = {
+      log: () => {
+      }
+    };
+    return SequelizeFixtures.loadFile(__dirname + '/../../fixtures/test-data.json', this.models, options);
   }
 
   /**

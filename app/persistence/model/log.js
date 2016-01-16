@@ -27,6 +27,7 @@ export default function(sequelize, node) {
     },
     node: {
       type: Sequelize.INTEGER,
+      allowNull: false,
       references: {
         model: node,
         key: 'id'

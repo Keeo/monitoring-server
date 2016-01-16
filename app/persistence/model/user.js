@@ -1,6 +1,10 @@
 import Sequelize from 'sequelize';
 
-export default function(sequelize, user) {
+/**
+ * @param {Sequelize} sequelize
+ * @returns {Model}
+ */
+export default function(sequelize) {
   return sequelize.define('user', {
     email: {
       type: Sequelize.STRING(255),

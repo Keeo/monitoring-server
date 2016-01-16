@@ -1,5 +1,10 @@
 import Sequelize from 'sequelize';
 
+/**
+ * @param {Sequelize} sequelize
+ * @param {Model} user
+ * @returns {Model}
+ */
 export default function(sequelize, user) {
   return sequelize.define('node', {
     hash: {

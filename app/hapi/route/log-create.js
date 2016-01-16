@@ -1,5 +1,9 @@
 import { info, error } from 'winston';
 
+/**
+ * @param {Persistence} persistence
+ * @returns {{method: string, path: string, handler: (function(*, *))}}
+ */
 export default function(persistence) {
   return {
     method: 'POST',
@@ -13,8 +17,14 @@ export default function(persistence) {
       node = {name: 'karel', id: 1};
       let log = request.payload.log;
       info(`Saving log from node ${node.name} with message '${log.message.substring(0, 16)}'.`, log);
-      persistence.saveLog(node.id, log.severity, log.message, log.context, log.created).then(() => {
-        reply();
+      persistence.getModel('log').create({
+        node: node.id,
+        severity: log.severity,
+        message: log.message,
+        context: log.context,
+        clientCreatedAt: log.created
+      }).then(({dataValues}) => {
+        reply(dataValues);
       }, err => {
         error(err);
         reply(err);

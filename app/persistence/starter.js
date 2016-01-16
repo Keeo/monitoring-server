@@ -7,11 +7,16 @@ export default function(options) {
     let persistence = new Persistence(generators, options);
     persistence.connect();
     persistence.loadModels();
-    persistence.sync(options.forceSync).then(() => {
-      info('Database synced successfully.');
-      return resolve(persistence);
+    persistence.testConnection().then(() => {
+      persistence.sync(options.forceSync).then(() => {
+        info('Database synced successfully.');
+        return resolve(persistence);
+      }, err => {
+        error('Database initialization failed.', err);
+        return reject(err);
+      });
     }, err => {
-      error('Database initialization failed.', err);
+      error('Test database connection failed.', err);
       return reject(err);
     });
   });

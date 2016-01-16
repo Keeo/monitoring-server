@@ -1,5 +1,10 @@
 import Sequelize from 'sequelize';
 
+/**
+ * @param {Sequelize} sequelize
+ * @param {Model} node
+ * @returns {Model}
+ */
 export default function(sequelize, node) {
   return sequelize.define('log', {
     severity: {

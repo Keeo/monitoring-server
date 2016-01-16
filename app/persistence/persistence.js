@@ -1,71 +1,52 @@
-import { info, warn } from 'winston';
-const { isInteger } = Number;
+import Sequelize from 'sequelize';
+import SequelizeFixtures from 'sequelize-fixtures';
+import merge from '../utils/merge';
 
-export default function(connection, generators) {
-  return {
-    generators: generators,
-    connection: connection,
+import user from './model/user';
+import node from './model/node';
+import log from './model/log';
 
-    query(query, values) {
-      return new Promise((resolve, reject) => {
-        this.connection.query(query, values, (error, result) => {
-          return error ? reject(error) : resolve(result);
-        });
-      });
-    },
+export class Persistence {
 
-    createNode(owner, name = this.generators.name.getName()) {
-      info(`Creating new node with name: ${name}.`);
-      let hash = this.generators.crypto.getNodeHash();
-      let user = isInteger(owner) ? owner : owner.id;
-      return this.query('INSERT INTO `node` SET hash = ?, user = ?, name = ?', [hash, user, name]).then(result => {
-        return {id: result.insertId, hash: hash, name: name, user: user};
-      });
-    },
+  constructor(generators, options = {}) {
+    this.generators = generators;
+    this.options = merge({
+      host: 'localhost',
+      username: 'root',
+      password: '',
+      database: 'monitoring',
+      port: '3306',
+      dialect: 'mysql'
+    }, options);
+  }
 
-    getUserFromHash(hash) {
-      info(`Retrieving user based on hash: ${hash.substring(0, 16)}.`);
-      return this._getOne('SELECT * FROM `user` WHERE hash = ?', hash);
-    },
+  connect() {
+    this.sequelize = new Sequelize(this.options.database, this.options.username, this.options.password, {
+      host: this.options.host,
+      port: this.options.port,
+      dialect: this.options.dialect,
+      define: {
+        freezeTableName: true
+      }
+    });
+  }
 
-    getNodeFromHash(hash) {
-      info(`Retrieving node based on hash: ${hash.substring(0, 16)}.`);
-      return this._getOne('SELECT * FROM `node` WHERE hash = ?', hash);
-    },
-
-    getNodeFromId(id) {
-      info(`Retrieving node based on id: ${id}.`);
-      return this._getOne('SELECT * FROM `node` WHERE id = ?', id);
-    },
-
-    getNodes() {
-      info(`Retrieving nodes`);
-      return this._getAll('node');
-    },
-
-    saveLog(node, severity, message, context, created) {
-      return this.query('INSERT INTO log SET node = ?, severity = ?, message = ?, context = ?, created = ?', [
-        node, severity, message, context, created
-      ]).then(null, err => console.log(err));
-    },
-
-    getLogs(node, limit) {
-      return this.query('SELECT * FROM log WHERE node = ? ORDER BY created DESC LIMIT ?', [node, limit]);
-    },
-
-    _getAll(table) {
-      return this.query('SELECT * FROM ??', [table]);
-    },
-
-    _getOne(query, key) {
-      return this.query(query, [key]).then(result => {
-        if (result.length !== 1) {
-          warn(`Something with key: '${key}' was not found.`, {query: query, key: key});
-          return Promise.reject('Something with this hash was not found.');
-        } else {
-          return result[0];
-        }
-      });
+  loadModels() {
+    if (this.models !== undefined) {
+      throw 'Models cannot be redefined in runtime.';
     }
-  };
+    this.models = {};
+    this.models.User = user(this.sequelize);
+    this.models.Node = node(this.sequelize, this.models.User);
+    this.models.Log = log(this.sequelize, this.models.Node);
+  }
+
+  sync(force = false) {
+    return this.sequelize.sync({force: force});
+  }
+
+  loadFixtures() {
+    console.log(__dirname + "/../../fixtures/test-data.json");
+    return SequelizeFixtures.loadFile(__dirname + '/../../fixtures/test-data.json', this.models);
+  }
 }

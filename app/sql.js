@@ -1,4 +1,4 @@
-import { Persistence } from './persistence/sequilize';
+import { Persistence } from './persistence/persistence';
 let persistence = new Persistence();
 persistence.connect();
 persistence.loadModels();

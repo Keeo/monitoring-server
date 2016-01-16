@@ -11,7 +11,7 @@ export default function starter(options) {
 
   info('==========================================================================');
   info(`Server starting at ${new Date()}`);
-  return persistenceStarter(options.mysql).then(persistence => {
+  return persistenceStarter(options.persistence).then(persistence => {
     return hapiStarter(persistence, options.hapi).then(() => {
       info(`Server started at ${new Date()}`);
     });

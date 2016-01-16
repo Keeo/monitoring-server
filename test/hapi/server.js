@@ -48,7 +48,7 @@ describe('Basic rest api server test', () => {
       });
     });
 
-    xit('User should be able to login.', done => {
+    it('User should be able to login.', done => {
       hapi.inject({
         method: 'POST',
         url: '/api/user/login',

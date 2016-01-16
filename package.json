@@ -15,18 +15,18 @@
   "license": "MIT",
   "repository": "https://github.com/Keeo/monitoring-server",
   "dependencies": {
-    "hapi": "^12.0.0",
+    "hapi": "^12.1.0",
     "hapi-auth-bearer-token": "^4.0.0",
-    "joi": "^7.1.0",
-    "mysql": "^2.10.0",
+    "joi": "^7.2.1",
+    "mysql": "^2.10.2",
     "sequelize": "^3.17.3",
     "string": "^3.3.1",
     "winston": "^2.1.1"
   },
   "devDependencies": {
-    "babel-core": "^6.3.26",
+    "babel-core": "^6.4.0",
     "babel-preset-es2015": "^6.3.13",
-    "babel-register": "^6.3.13",
+    "babel-register": "^6.4.3",
     "chai": "^3.4.1",
     "lorem-ipsum": "^1.0.3",
     "mocha": "^2.3.4",

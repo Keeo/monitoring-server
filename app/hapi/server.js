@@ -40,8 +40,13 @@ export default function(persistence, options) {
     server.auth.strategy('node', 'bearer-access-token', {
       validateFunc(token, callback) {
         persistence.getModel('node').findOne({where: {hash: token}}).then(node => {
-          info(`Node ${node.name} with id ${node.id} authorized successfully.`);
-          return callback(null, true, node);
+          if(node) {
+            info(`Node ${node.name} with id ${node.id} authorized successfully.`);
+            return callback(null, true, node);
+          } else {
+            info(`Node authorization failed with token: ${token.substring(0, 16)}.`, err);
+            return callback(null, false);
+          }
         }, err => {
           info(`Node authorization failed with token: ${token.substring(0, 16)}.`, err);
           return callback(null, false);

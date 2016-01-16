@@ -4,6 +4,7 @@ import logGetAll from './route/log-get-all';
 import nodeCreate from './route/node-create';
 import nodeGetAll from './route/node-get-all';
 import nodeGetOne from './route/node-get-one';
+import userLogin from './route/user-login';
 
 export default function(server, persistence) {
   server.route(index(persistence));
@@ -12,4 +13,5 @@ export default function(server, persistence) {
   server.route(nodeCreate(persistence));
   server.route(nodeGetAll(persistence));
   server.route(nodeGetOne(persistence));
+  server.route(userLogin(persistence));
 }

@@ -79,4 +79,4 @@ Current maintainers:
 
 LICENCE
 -----------
-[MIT](https://github.com/one-coffee/monitoring-server/master/LICENCE)
+[MIT](https://github.com/one-coffee/monitoring-server/blob/master/LICENSE)

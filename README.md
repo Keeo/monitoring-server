@@ -1,16 +1,84 @@
-This project uses broccoli as process pipeline. Tested on w7x64 with node 0.12.9.
+MONITORING SERVER
+=================
 
-#Required packages for development#
+Quick and light rest api server for your monitoring data. 
 
- - mocha (test runner)
- - babel (es6 to es5 transpiler)
- - broccoli-timepiece (compilation pipeline)
- - supervisor (watches over file change and restarts app)[does not work on w7x64 with node 5.3.0]
 
-Install them with `npm install -g mocha babel-cli supervisor`
+CONTENTS OF THIS FILE
+---------------------
+   
+ * [Introduction](#introduction)
+ * [Requirements](#requirements)
+ * [Development modules](#development-modules)
+ * [Installation](#installation)
+ * [Configuration](#configuration)
+ * [Troubleshooting](#troubleshooting)
+ * [Maintainers](#maintainers)
+ * [Licence](#licence)
+ 
+ 
+INTRODUCTION
+------------
 
-#How to run server#
+Monitoring server is aimed to be easy and quick to deploy and modify if necessary. 
+This server provides REST which is extensively used by nodes and by gui.
 
- - npm install
- - npm test
- - npm start 
+ * For a full description of the api, visit the project route folder:  
+   https://github.com/one-coffee/monitoring-server/tree/master/app/hapi/route
+
+ * To submit bug reports and feature suggestions, or to track changes:  
+   https://github.com/one-coffee/monitoring-server/issues
+
+
+REQUIREMENTS
+------------
+
+This project does not require any globally installed modules once already built.
+
+
+DEVELOPMENT MODULES
+-------------------
+
+For development, building or testing this project requires following global packages.
+
+ * [babel-cli](https://babeljs.io/docs/usage/cli/)
+ * [mocha](https://drupal.org/project/panels)
+ * [jscs](http://jscs.info/)
+ * [jshint](http://jshint.com/)
+ * [supervisor](https://github.com/petruisfan/node-supervisor)
+ 
+`npm install -g jscs mocha babel-cli jshint supervisor`
+
+
+INSTALLATION
+------------
+
+ - Clone project from github. 
+ - Install all development modules.
+ - Run `npm run test` to test code.
+ - Run `npm run build` to build code.
+ - To start server run `node dist/app.php`
+ 
+
+CONFIGURATION
+-------------
+
+Copy `./dist/config_example.json` into `./dist/config.json` and make required changes.
+
+
+TROUBLESHOOTING
+---------------
+
+This project has been tested on strange mixed environment and it's possible it won't work on yours. If that happens don;t hesitate to create issue.
+
+
+MAINTAINERS
+-----------
+
+Current maintainers:
+ * Martin Morávek <moravek.martin@gmail.com> - https://github.com/Keeo
+
+
+LICENCE
+-----------
+[MIT](https://github.com/one-coffee/monitoring-server/master/LICENCE)

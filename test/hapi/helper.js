@@ -1,3 +1,4 @@
+import fs from 'fs-extra';
 import Server from '../../app/hapi/server';
 import Persistence from '../../app/persistence/persistence';
 
@@ -22,6 +23,9 @@ export function getUser(server) {
  */
 export function getPersistenceInstance() {
   return new Promise(resolve => {
+    let storage = __dirname + '/../../tmp/test-database.sqlite';
+    fs.ensureFileSync(storage);
+
     let persistence = new Persistence({
       host: 'localhost',
       username: 'root',
@@ -29,7 +33,7 @@ export function getPersistenceInstance() {
       database: 'monitoring',
       port: '3306',
       dialect: 'sqlite',
-      storage: __dirname + '/../../tmp/test-database.sqlite',
+      storage: storage,
       logging: false
     });
     persistence.connect();

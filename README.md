@@ -47,23 +47,21 @@ For development, building or testing this project requires following global pack
  * [jshint](http://jshint.com/)
  * [supervisor](https://github.com/petruisfan/node-supervisor)
  
-`npm install -g jscs mocha babel-cli jshint supervisor`
-
 
 INSTALLATION
 ------------
 
- - Clone project from github. 
- - Install all development modules.
- - Run `npm run test` to test code.
- - Run `npm run build` to build code.
- - To start server run `node dist/app.php`
+1. Clone project from github. `git clone git@github.com:one-coffee/monitoring-server.git`
+2. Install all development modules. `npm install -g jscs mocha babel-cli jshint supervisor`
+3. Test code. `npm run test`
+4. Build code. `npm run build`
+5. Start server `node dist/app.php`
  
 
 CONFIGURATION
 -------------
 
-Copy `./dist/config_example.json` into `./dist/config.json` and make required changes.
+Copy `./dist/config.default.js` into `./dist/config.js` and make required changes.
 
 
 TROUBLESHOOTING

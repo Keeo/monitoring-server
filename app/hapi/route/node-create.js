@@ -3,7 +3,7 @@ import { error } from 'winston';
 export default function(persistence) {
   return {
     method: 'POST',
-    path: '/api/node/',
+    path: '/api/nodes',
     config: {
       auth: 'user'
     },
@@ -11,7 +11,7 @@ export default function(persistence) {
       persistence.getModel('node').create({
         user: request.auth.credentials.id
       }).then(node => {
-        reply(node.get({plain: true}));
+        reply({node: node.get({plain: true})});
       }, err => {
         error(err);
         reply(err);

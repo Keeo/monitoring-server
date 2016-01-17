@@ -7,7 +7,7 @@ import { info, error } from 'winston';
 export default function(persistence) {
   return {
     method: 'POST',
-    path: '/api/log/',
+    path: '/api/logs',
     config: {
       auth: 'node'
     },
@@ -22,7 +22,7 @@ export default function(persistence) {
         context: log.context,
         clientCreatedAt: log.created
       }).then(log => {
-        reply(log.get({plain: true}));
+        reply({log: log.get({plain: true})});
       }, err => {
         error(err);
         reply(err);

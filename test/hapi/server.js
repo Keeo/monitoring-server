@@ -36,7 +36,7 @@ describe('Basic rest api server test', () => {
     it('User should not be able to login with wrong credentials.', done => {
       hapi.inject({
         method: 'POST',
-        url: '/api/user/login',
+        url: '/api/users/login',
         payload: {
           email: 'test@email.com',
           password: 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e413f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff'
@@ -51,16 +51,34 @@ describe('Basic rest api server test', () => {
     it('User should be able to login.', done => {
       hapi.inject({
         method: 'POST',
-        url: '/api/user/login',
+        url: '/api/users/login',
         payload: {
           email: 'test@email.com',
           password: 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff'
         }
       }, response => {
         assert.equal(response.statusCode, 200);
-        let returnedUser = response.result;
+        assert.isDefined(response.result.user);
+        let returnedUser = response.result.user;
         server.persistence.getModel('user').findOne({where: {email: 'test@email.com'}}).then(user => {
           assert.equal(returnedUser.id, user.id);
+          assert.equal(returnedUser.hash, user.hash);
+          done();
+        });
+      });
+    });
+
+    it('User get one route.', done => {
+      getUser(server).then(user => {
+        hapi.inject({
+          url: '/api/users/' + user.id,
+          credentials: user
+        }, response => {
+          assert.equal(response.statusCode, 200);
+          assert.isDefined(response.result.user);
+          let returnedUser = response.result.user;
+          assert.equal(returnedUser.id, user.id);
+          assert.equal(returnedUser.email, user.email);
           assert.equal(returnedUser.hash, user.hash);
           done();
         });
@@ -71,11 +89,12 @@ describe('Basic rest api server test', () => {
       getNode(server).then(node => {
         getUser(server).then(user => {
           hapi.inject({
-            url: '/api/node/' + node.id,
+            url: '/api/nodes/' + node.id,
             credentials: user
           }, response => {
             assert.equal(response.statusCode, 200);
-            let returnedNode = response.result;
+            assert.isDefined(response.result.node);
+            let returnedNode = response.result.node;
             assert.equal(returnedNode.id, node.id);
             assert.equal(returnedNode.name, node.name);
             assert.equal(returnedNode.hash, node.hash);
@@ -88,11 +107,12 @@ describe('Basic rest api server test', () => {
     it('Node get all route.', done => {
       getUser(server).then(user => {
         hapi.inject({
-          url: '/api/node/',
+          url: '/api/nodes',
           credentials: user
         }, response => {
           assert.equal(response.statusCode, 200);
-          let nodes = response.result;
+          assert.isDefined(response.result.nodes);
+          let nodes = response.result.nodes;
           server.persistence.getModel('node').findAndCountAll({raw: true}).then(({count}) => {
             assert.isAbove(count, 0, 'No data in tests, maybe broken test?');
             assert.equal(nodes.length, count);
@@ -106,11 +126,12 @@ describe('Basic rest api server test', () => {
       getUser(server).then(user => {
         hapi.inject({
           method: 'POST',
-          url: '/api/node/',
+          url: '/api/nodes',
           credentials: user
         }, response => {
           assert.equal(response.statusCode, 200);
-          let node = response.result;
+          assert.isDefined(response.result.node);
+          let node = response.result.node;
           assert.equal(node.user, user.id);
           assert.isString(node.hash);
           assert.isString(node.name);
@@ -123,11 +144,12 @@ describe('Basic rest api server test', () => {
       getNode(server).then(node => {
         getUser(server).then(user => {
           hapi.inject({
-            url: '/api/log/' + node.id,
+            url: '/api/logs/' + node.id,
             credentials: user
           }, response => {
             assert.equal(response.statusCode, 200);
-            let logs = response.result;
+            assert.isDefined(response.result.logs);
+            let logs = response.result.logs;
             server.persistence.getModel('log').findAndCountAll({raw: true}).then(({count}) => {
               assert.isAbove(count, 0, 'No data in tests, maybe broken test?');
               assert.equal(logs.length, count);
@@ -138,17 +160,39 @@ describe('Basic rest api server test', () => {
       });
     });
 
+    it('Log get all rest route.', done => {
+      getNode(server).then(node => {
+        getUser(server).then(user => {
+          hapi.inject({
+            url: '/api/logs?node=' + node.id,
+            credentials: user
+          }, response => {
+            assert.equal(response.statusCode, 200);
+            assert.isDefined(response.result.logs);
+            let logs = response.result.logs;
+            server.persistence.getModel('log').findAndCountAll({where: {node: node.id}, raw: true}).then(({count}) => {
+              assert.isAbove(count, 0, 'No data in tests, maybe broken test?');
+              assert.equal(logs.length, count);
+              done();
+            });
+          });
+        });
+      });
+    });
+
+
     it('Log creation route.', done => {
       getNode(server).then(node => {
         let log = {severity: 'info', message: 'it should work'};
         hapi.inject({
           method: 'POST',
-          url: '/api/log/',
+          url: '/api/logs',
           credentials: node,
           payload: {log: log}
         }, response => {
           assert.equal(response.statusCode, 200);
-          let returnedLog = response.result;
+          assert.isDefined(response.result.log);
+          let returnedLog = response.result.log;
           assert.equal(returnedLog.node, node.id);
           assert.equal(returnedLog.severity, log.severity);
           assert.equal(returnedLog.message, log.message);

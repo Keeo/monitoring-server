@@ -1,5 +1,4 @@
 import { error } from 'winston';
-import Joi from 'joi';
 
 /**
  * @param {Persistence} persistence
@@ -8,20 +7,14 @@ import Joi from 'joi';
 export default function(persistence) {
   return {
     method: 'GET',
-    path: '/api/logs/{node}/{limit?}',
+    path: '/api/logs',
     config: {
-      auth: 'user',
-      validate: {
-        params: {
-          node: Joi.number().integer(),
-          limit: Joi.number().integer()
-        }
-      }
+      auth: 'user'
     },
     handler(request, reply) {
-      const node = request.params.node;
-      const limit = request.params.limit ? request.params.limit : 50;
-      const offset = request.params.offset ? request.params.offset : 0;
+      const node = request.query.node;
+      const limit = request.query.limit ? request.query.limit : 50;
+      const offset = request.query.offset ? request.query.offset : 0;
       persistence.getModel('log').findAll({offset: offset, limit: limit, raw: true, where: {node: node}}).then(logs => {
         reply({logs: logs});
       }, err => {

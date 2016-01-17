@@ -8,7 +8,7 @@ import Joi from 'joi';
 export default function(persistence) {
   return {
     method: 'GET',
-    path: '/api/nodes/{id}',
+    path: '/api/users/{id}',
     config: {
       auth: 'user',
       validate: {
@@ -18,8 +18,8 @@ export default function(persistence) {
       }
     },
     handler(request, reply) {
-      persistence.getModel('node').findById(request.params.id).then(node => {
-        reply({node: node.get({plain: true})});
+      persistence.getModel('user').findById(request.params.id).then(user => {
+        reply({user: user.get({plain: true})});
       }, err => {
         error(err);
         reply(err);

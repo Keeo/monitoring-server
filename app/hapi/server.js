@@ -11,7 +11,7 @@ export default class Server {
    * @param {*} options
    */
   constructor(persistence, options) {
-    options = merge({port: 3000}, options);
+    options = merge({port: 3000, routes: {cors: true}}, options);
     info(`Rest api is going to be available on port ${options.port}.`);
     this.persistence = persistence;
     this.server = new Hapi.Server();

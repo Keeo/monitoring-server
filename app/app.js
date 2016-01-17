@@ -1,3 +1,4 @@
 import builder from './builder.js';
+import config from './config';
 
-builder({hapi: {port: 4000}, persistence: {port: 3306}});
+builder(config);

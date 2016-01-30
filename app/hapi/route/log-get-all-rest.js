@@ -1,7 +1,7 @@
-// jscs:disable requireCamelCaseOrUpperCaseIdentifiers
 import { error } from 'winston';
 import Joi from 'joi';
 import queryModifier from '../../utils/query-modified';
+import orderParser from '../../utils/order-parser';
 
 /**
  * @param {Persistence} persistence
@@ -15,24 +15,41 @@ export default function(persistence) {
       auth: 'user',
       validate: {
         query: {
+          order: Joi.string().default('-id'),
           node: Joi.number().integer().min(0).required(),
           page: Joi.number().integer().min(1).default(1),
-          per_page: Joi.number().integer().min(1).max(1000).default(30)
+          perPage: Joi.number().integer().min(1).max(1000).default(30)
         }
       }
     },
     handler(request, reply) {
       const node = request.query.node;
+      const order = request.query.order;
       const page = request.query.page;
-      const perPage = request.query.per_page;
-      persistence.getModel('log').findAndCountAll({limit: perPage, offset: perPage * (page - 1), raw: true, where: {node: node}}).then(({ count, rows }) => {
-        const totalPageCount = Math.ceil(count / perPage);
+      const perPage = request.query.perPage;
+      persistence.getModel('log').findAndCountAll({
+        limit: perPage,
+        offset: perPage * (page - 1),
+        raw: true,
+        where: {node: node},
+        order: orderParser(order)
+      }).then(({ count, rows }) => {
+        const totalPageCount = Math.max(Math.ceil(count / perPage), 1);
         const url = request.connection.info.protocol + '://' + request.info.host + request.url.path;
         const nextUrl = queryModifier(url, {page: Math.min(page + 1, totalPageCount)});
         const prevUrl = queryModifier(url, {page: Math.max(page - 1, 1)});
         const lastUrl = queryModifier(url, {page: totalPageCount});
         const linkHeader = `<${prevUrl}>; rel="prev", <${nextUrl}>; rel="next", <${lastUrl}>; rel="last"`;
-        reply({logs: rows.map(l => l.id)}).header('X-Total-Page-Count', totalPageCount).header('LINK', linkHeader);
+        reply({
+          logs: rows,
+          meta: {
+            page: page,
+            perPage: perPage,
+            nextPage: Math.min(page + 1, totalPageCount),
+            prevPage: Math.max(page - 1, 1),
+            totalPageCount: totalPageCount
+          }
+        }).header('X-Total-Page-Count', totalPageCount).header('LINK', linkHeader);
       }, err => {
         error(err);
         reply(err);

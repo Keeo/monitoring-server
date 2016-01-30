@@ -1,4 +1,5 @@
 import { error } from 'winston';
+import generators from '../../generator/generators';
 
 export default function(persistence) {
   return {
@@ -8,13 +9,17 @@ export default function(persistence) {
       auth: 'user'
     },
     handler(request, reply) {
-      persistence.getModel('node').create({
-        user: request.auth.credentials.id
-      }).then(node => {
-        reply({node: node.get({plain: true})});
-      }, err => {
-        error(err);
-        reply(err);
+      const nodeModel = persistence.getModel('node');
+      nodeModel.findAll({raw: true, attributes: ['name']}).then(takenNames => {
+        nodeModel.create({
+          user: request.auth.credentials.id,
+          name: generators.name.getName(takenNames.map(n => n.name))
+        }).then(node => {
+          reply({node: node.get({plain: true})});
+        }, err => {
+          error(err);
+          reply(err);
+        });
       });
     }
   };

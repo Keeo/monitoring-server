@@ -1,5 +1,8 @@
 import Hapi from 'hapi';
 import AuthBearer from 'hapi-auth-bearer-token';
+import HapiSwagger from 'hapi-swagger';
+import Inert from 'inert';
+import Vision from 'vision';
 import { info, error } from 'winston';
 import merge from '../utils/merge';
 import routeLoader from './route-loader';
@@ -20,6 +23,18 @@ export default class Server {
 
   registerRoutes() {
     routeLoader(this.server, this.persistence);
+  }
+
+  registerSwagger() {
+    this.server.register([Inert, Vision, {
+      register: HapiSwagger,
+      options: {
+        info: {
+          title: 'Monitoring server',
+          version: 'WIP'
+        }
+      }
+    }]);
   }
 
   registerAuthorization() {

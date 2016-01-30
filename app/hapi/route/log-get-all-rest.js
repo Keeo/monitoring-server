@@ -13,6 +13,33 @@ export default function(persistence) {
     path: '/api/logs',
     config: {
       auth: 'user',
+      tags: ['api'],
+      plugins: {
+        'hapi-swagger': {
+          responses: {
+            200: {
+              description: 'Success',
+              schema: Joi.object({
+                logs: Joi.array().items(
+                  Joi.object({
+                    severity: Joi.string().required(),
+                    message: Joi.string().required(),
+                    context: Joi.string(),
+                    created: Joi.string()
+                  })
+                ), meta: Joi.object({
+                  page: Joi.number().min(1).default(1).required(),
+                  perPage: Joi.number().default(30).min(1).max(1000).required(),
+                  nextPage: Joi.number().min(1).required(),
+                  prevPage: Joi.number().min(1).required(),
+                  totalPageCount: Joi.number().min(1).required()
+                }).required()
+              }).label('Result')
+            },
+            400: {description: 'Bad Request'}
+          }
+        }
+      },
       validate: {
         query: {
           order: Joi.string().default('-id'),

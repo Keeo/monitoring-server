@@ -1,5 +1,6 @@
 import { error } from 'winston';
 import generators from '../../generator/generators';
+import Joi from 'joi';
 
 /**
  * @param {Persistence} persistence
@@ -10,7 +11,27 @@ export default function(persistence) {
     method: 'POST',
     path: '/api/users/login',
     config: {
-      auth: false
+      auth: false,
+      tags: ['api'],
+      validate: {
+        payload: {
+          email: Joi.string().email().required(),
+          password: Joi.string().required()
+        }
+      },
+      plugins: {
+        'hapi-swagger': {
+          responses: {
+            200: {
+              description: 'Success',
+              schema: Joi.object({
+                email: Joi.string().email(),
+                hash: Joi.string()
+              }).label('user')
+            }
+          }
+        }
+      }
     },
     handler(request, reply) {
       let {email, password} =  request.payload || {};

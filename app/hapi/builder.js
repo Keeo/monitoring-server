@@ -11,6 +11,7 @@ export default function builder(persistence, options) {
     let server = new Server(persistence, options);
     server.registerAuthorization();
     server.registerRoutes();
+    server.registerSwagger();
     server.server.start(() => {
       info('Hapi server started.');
       resolve(server);

@@ -11,9 +11,23 @@ export default function(persistence) {
     path: '/api/users/{id}',
     config: {
       auth: 'user',
+      tags: ['api'],
       validate: {
         params: {
           id: Joi.number().integer()
+        }
+      },
+      plugins: {
+        'hapi-swagger': {
+          responses: {
+            200: {
+              description: 'Success',
+              schema: Joi.object({
+                email: Joi.string().email(),
+                hash: Joi.string()
+              }).label('user')
+            }
+          }
         }
       }
     },

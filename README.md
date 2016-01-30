@@ -25,6 +25,7 @@ This server provides REST which is extensively used by nodes and by gui.
 
  * For a full description of the api, visit the project route folder:  
    https://github.com/one-coffee/monitoring-server/tree/master/app/hapi/route
+   or run server and access /documentation.
 
  * To submit bug reports and feature suggestions, or to track changes:  
    https://github.com/one-coffee/monitoring-server/issues

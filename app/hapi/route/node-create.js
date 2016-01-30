@@ -1,12 +1,28 @@
 import { error } from 'winston';
 import generators from '../../generator/generators';
+import Joi from 'joi';
 
 export default function(persistence) {
   return {
     method: 'POST',
     path: '/api/nodes',
     config: {
-      auth: 'user'
+      auth: 'user',
+      tags: ['api'],
+      plugins: {
+        'hapi-swagger': {
+          responses: {
+            200: {
+              description: 'Success',
+              schema: Joi.object({
+                name: Joi.string().required(),
+                hash: Joi.string().required(),
+                user: Joi.string().required()
+              }).label('node')
+            }
+          }
+        }
+      }
     },
     handler(request, reply) {
       const nodeModel = persistence.getModel('node');

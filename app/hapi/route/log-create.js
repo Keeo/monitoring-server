@@ -1,4 +1,5 @@
 import { info, error } from 'winston';
+import Joi from 'joi';
 
 /**
  * @param {Persistence} persistence
@@ -9,7 +10,33 @@ export default function(persistence) {
     method: 'POST',
     path: '/api/logs',
     config: {
-      auth: 'node'
+      auth: 'node',
+      tags: ['api'],
+      validate: {
+        payload: {
+          log: Joi.object().keys({
+            severity: Joi.string().required(),
+            message: Joi.string().required(),
+            context: Joi.string(),
+            created: Joi.string()
+          })
+        }
+      },
+      plugins: {
+        'hapi-swagger': {
+          responses: {
+            200: {
+              description: 'Success',
+              schema: Joi.object({
+                severity: Joi.string().required(),
+                message: Joi.string().required(),
+                context: Joi.string(),
+                created: Joi.string()
+              }).label('log')
+            }
+          }
+        }
+      }
     },
     handler(request, reply) {
       let node = request.auth.credentials;

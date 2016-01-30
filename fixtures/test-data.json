@@ -7,7 +7,8 @@
     "data": {
       "id": 1,
       "email": "test@email.com",
-      "password": "ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff",
+      "password": "4761ebdec16fddc0407af3a2ebc0b1b2f8905bf8d441890c4ec374f09943b4f656172ff54b8744c25cf3c962e7d0db580a0ed3b95ec4bcc16e940b6761624d15",
+      "salt": "9eda19c48d4391f8ffb2dbc2a7cb8cbcb32c99865645bc7c7a6f386bf9c04890",
       "hash": "user-secret-hash-1"
     }
   },

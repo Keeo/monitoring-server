@@ -1,4 +1,5 @@
 import { error } from 'winston';
+import generators from '../../generator/generators';
 
 /**
  * @param {Persistence} persistence
@@ -16,11 +17,18 @@ export default function(persistence) {
       if (!email || !password) {
         return reply().code(400);
       }
-      persistence.getModel('user').findOne({where: {password: password, email: email}, raw: true}).then(user => {
-        if (user) {
-          reply({user: user});
+      persistence.getModel('user').findOne({where: {email: email}}).then(user => {
+        if (!user) {
+          return reply({errors: [{status: '401', title: 'Authorization failed.'}]}).code(401);
+        }
+        const hash = generators.crypto.getHash(password, user.salt);
+        if (user && user.password === hash) {
+          user.hash = generators.crypto.getToken();
+          user.save().then(user => {
+            return reply({user: user.get({plain: true})});
+          });
         } else {
-          reply({errors: [{status: '401', title: 'Authorization failed.'}]}).code(401);
+          return reply({errors: [{status: '401', title: 'Authorization failed.'}]}).code(401);
         }
       }, err => {
         error(err);

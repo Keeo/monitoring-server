@@ -1,4 +1,4 @@
-import { error } from 'winston';
+import { info, error } from 'winston';
 import minimist from 'minimist';
 import Generate from './cli/generate';
 
@@ -12,4 +12,7 @@ switch (task) {
     break;
   default:
     error('Wrong input.');
+    info('Available commands:');
+    info('generate user --email={email} --password={password}');
+    info('generate logs --node={nodeId} --count={count|default 100}');
 }

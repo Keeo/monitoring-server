@@ -15,9 +15,13 @@ export default function(sequelize) {
       type: Sequelize.CHAR(128),
       allowNull: false
     },
+    salt: {
+      type: Sequelize.CHAR(64),
+      allowNull: false
+    },
     hash: {
       type: Sequelize.CHAR(128),
-      allowNull: false,
+      allowNull: true,
       unique: true
     }
   });

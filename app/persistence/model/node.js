@@ -12,7 +12,7 @@ export default function(sequelize, user) {
       type: Sequelize.CHAR(128),
       unique: true,
       allowNull: false,
-      defaultValue: () => generators.crypto.getNodeHash()
+      defaultValue: () => generators.crypto.getToken()
     },
     name: {
       type: Sequelize.STRING(20),

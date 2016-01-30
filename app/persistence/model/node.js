@@ -16,8 +16,7 @@ export default function(sequelize, user) {
     },
     name: {
       type: Sequelize.STRING(20),
-      allowNull: false,
-      defaultValue: () => generators.name.getName()
+      allowNull: false
     },
     user: {
       type: Sequelize.INTEGER,
